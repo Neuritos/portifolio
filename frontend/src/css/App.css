@@ -1,0 +1,70 @@
+#root, html, body {
+  height: 100%;
+  margin: 0;
+
+}
+
+header{
+  background-color: brown;
+  justify-content: center;
+  /* align-items: center; */
+  display: flex;
+}
+
+.background{
+  background-color: rgb(13, 99, 174);
+  height: 300px;
+  width: 300px;
+}
+
+.profile-ink{
+  background-color: aqua;
+  height: 250px;
+  display: absolute;
+  
+}
+
+.gota1, .gota2, .gota3, .gota4, .gota5{
+  height: 100px;
+  width: 20%;
+}
+
+.gota1{
+  background-color: blueviolet;
+}
+.gota2{
+  background-color: rgb(43, 226, 70);
+} 
+.gota3{
+  background-color: rgb(220, 226, 43);
+}
+.gota4{
+  background-color: rgb(40, 27, 189);
+}
+.gota5{
+  background-color: rgb(226, 43, 76);
+}
+
+.ink-conten{
+  display: flex;
+  position: absolute;
+  width: 100px;
+  top: 0;
+  z-index: 1;
+}
+
+ .profile{
+  height: 170px;
+  width: 170px;
+  background-image: url(./img/foto.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 100%;
+  border: 6px solid #1e1e1e;
+  position: relative;
+  top: 0;
+  position: relative;
+  z-index: 2;
+} 
+
