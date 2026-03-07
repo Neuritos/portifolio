@@ -105,12 +105,22 @@ function App() {
       case 'skills':
         return (
           <div className="view-content">
-            <h2> REPOSITORIOS.BIN</h2>
-            <p>Listando diretórios disponíveis no GitHub...</p>
-            <ul>
-              <li><a href="#">[PROJETO_01] - Sistema de Login Seguro</a></li>
-              <li><a href="#">[PROJETO_02] - API Rest com Node.js</a></li>
-            </ul>
+            <h2> HABILIDADES.ZIP</h2>
+            <p>Listando minhas habilidades em programação...</p>
+            <div class='skill'>
+                HTML - 96%
+                <div id='progress-barra'><div class='progress-prenchimento1'></div></div>
+                CSS - 91%
+                <div id='progress-barra'><div class='progress-prenchimento2'></div></div>
+                JavaScript - 79%
+                <div id='progress-barra'><div class='progress-prenchimento3'></div></div>
+                Python - 70%
+                <div id='progress-barra'><div class='progress-prenchimento4'></div></div> 
+                Kali Linux - 9%
+                <div id='progress-barra'><div class='progress-prenchimento5'></div></div> 
+                Debian - 2%
+                <div id='progress-barra'><div class='progress-prenchimento6'></div></div> 
+              </div>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
         );
@@ -191,11 +201,11 @@ function App() {
       <div className="color-picker">
 
         <span className="label">THEME_COLOR:</span>
-        <button className="dot green" onClick={() => setTerminalColor('#00FF41')}></button>
-        <button className="dot amber" onClick={() => setTerminalColor('#FFB000')}></button>
-        <button className="dot cyan" onClick={() => setTerminalColor('#00FFFF')}></button>
-        <button className="dot red" onClick={() => setTerminalColor('#FF3131')}></button>
-        <button className="dot purple" onClick={() => setTerminalColor('#a800ba')}></button>
+        <button className="dot green" onClick={() => { setTerminalColor('#00FF41'); playSfx('button-click.mp3'); }}></button>
+        <button className="dot amber" onClick={() => { setTerminalColor('#FFB000'); playSfx('button-click.mp3'); }}></button>
+        <button className="dot cyan" onClick={() => { setTerminalColor('#00FFFF'); playSfx('button-click.mp3'); }}></button>
+        <button className="dot red" onClick={() => { setTerminalColor('#FF3131'); playSfx('button-click.mp3'); }}></button>
+        <button className="dot purple" onClick={() => { setTerminalColor('#a800ba'); playSfx('button-click.mp3'); }}></button>
       </div>
 
       <div className="terminal-window">

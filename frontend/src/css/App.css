@@ -152,17 +152,6 @@
   display: inline-block;
 }
 
-/* .back-btn {
-  background: none;
-  border: none;
-  color: var(--main-color);
-  font-family: inherit;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 20px;
-  display: block;
-} */
-
 .game1, .game2, .game3{
   padding: 10px;
   border: 3px solid  var(--main-color);
@@ -225,3 +214,99 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+
+
+
+
+
+
+.skill {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  font-weight: bold;
+}
+
+@keyframes blink-text {
+  50% { opacity: 0; }
+}
+
+#progress-barra {
+  width: 250px;
+  height: 10px;
+  border: 1px solid var(--main-color);
+  margin-top: 0px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.progress-prenchimento1, .progress-prenchimento2, .progress-prenchimento3, .progress-prenchimento4, .progress-prenchimento5, .progress-prenchimento6 {
+  height: 100%;
+  background-color: var(--main-color);
+  width: 0%;
+
+}
+.progress-prenchimento1{
+  animation: fill-skill 1.5s forwards;
+}
+.progress-prenchimento2{
+  animation: fill-skill1 1.5s forwards;
+}
+
+.progress-prenchimento3{
+  animation: fill-skill2 1.5s forwards;
+}
+
+.progress-prenchimento4{
+  animation: fill-skill3 1.5s forwards;
+}
+.progress-prenchimento5{
+  animation: fill-skill4 1.5s forwards;
+}
+.progress-prenchimento6{
+  animation: fill-skill5 1.5s forwards;
+}
+
+@keyframes fill-skill {
+  0% { width: 0%; 
+  }
+  100% { width: 96%; 
+  }
+}
+@keyframes fill-skill1 {
+  0% { width: 0%; 
+  }
+  100% { width: 91%; 
+  }
+}
+
+@keyframes fill-skill2 {
+  0% { width: 0%; 
+  }
+  100% { width: 79%; 
+  }
+}
+
+@keyframes fill-skill3 {
+  0% { width: 0%; 
+  }
+  100% { width: 70%; 
+  }
+}
+@keyframes fill-skill4 {
+  0% { width: 0%; 
+  }
+  100% { width: 9%; 
+  }
+}
+@keyframes fill-skill5 {
+  0% { width: 0%; 
+  }
+  100% { width: 2%; 
+  }
+}
+
+
+
