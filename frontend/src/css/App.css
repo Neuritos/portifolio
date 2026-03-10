@@ -169,7 +169,7 @@
   background-color: var(--main-color);
 }
 .game1{
-  background-image: url(em-breve.png);
+  background-image: url(./img/em-breve.png);
   align-items: center;
   justify-content: center;
   display: flex;
@@ -180,7 +180,7 @@
   background-size: 80%;
 }
 .game2{
-  background-image: url(velha2.png);
+  background-image: url(./img/velha2.png);
   align-items: center;
   justify-content: center;
   display: flex;
@@ -192,7 +192,7 @@
 }
 
 .game3{
-  background-image: url(snake.png);
+  background-image: url(./img/snake.png);
   align-items: center;
   justify-content: center;
   display: flex;
