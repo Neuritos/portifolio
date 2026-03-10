@@ -1,5 +1,30 @@
 import { useEffect, useState, useRef } from 'react'
 import './css/App.css'
+import SnakeGame from './SnakeGame.jsx';
+import Velha from './Velha.jsx'
+
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
+
+// --- COMPONENTE DA TELA DE BOOT DINÂMICA ---
+const BootScreen = ({ title, status, message, onStart, color }) => (
+  <div className="terminal-screen" style={{ '--main-color': color, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div className="terminal-window" style={{ padding: '50px', textAlign: 'center' }}>
+      <header className="terminal-header"><span className="title">{title}</span></header>
+      <div className="terminal-content">
+        <h2 style={{ marginBottom: '20px' }}>SYSTEM_STATUS: {status}</h2>
+        <p>{message}</p>
+        <br />
+        <button 
+          className="back-link" 
+          style={{ fontSize: '1.5rem', cursor: 'pointer', background: 'none', border: '1px solid', color: 'inherit', padding: '10px 20px' }}
+          onClick={onStart}
+        >
+          [ INITIALIZE_SYSTEM ]
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
 function App() {
   const [displayText, setDisplayText] = useState('');
@@ -7,21 +32,52 @@ function App() {
   const [currentView, setCurrentView] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
-  const bgMusic = useRef(new Audio('Ambience2.mp3'));
+  const location = useLocation();
+  const bgMusic = useRef(new Audio('Barrier.mp3'));
+
+  // --- LÓGICA DE TEXTOS DA TELA DE BOOT ---
+  const getBootConfig = () => {
+    switch (location.pathname) {
+      case '/snakegame':
+        return {
+          title: 'SNAKE_PROTOCOL_ENCRYPTED',
+          status: 'GAME_LOCKED',
+          message: 'Módulos de movimento e som desativados. Descriptografe para jogar Snake.',
+          color: '#00FF41'
+        };
+      case '/velha':
+        return {
+          title: 'TIC_TAC_TOE_SECURITY',
+          status: 'LOGIC_ENCRYPTED',
+          message: 'Inicialize o sistema para carregar a matriz do jogo.',
+          color: '#00FFFF'
+        };
+      default:
+        return {
+          title: 'AUTHENTICATION_REQUIRED',
+          status: 'ENCRYPTED',
+          message: 'Clique abaixo para descriptografar os arquivos e ativar os módulos de som.',
+          color: '#00FF41'
+        };
+    }
+  };
+
+  const bootConfig = getBootConfig();
+
   useEffect(() => {
     bgMusic.current.loop = true;
-    bgMusic.current.volume = 1;
-    
-    if (!isMuted) {
-      bgMusic.current.play().catch(() => console.log("Autoplay bloqueado pelo browser"));
+    bgMusic.current.volume = 0.5;
+    if (hasInteracted && !isMuted) {
+      bgMusic.current.play().catch(() => console.log("Autoplay bloqueado"));
     } else {
       bgMusic.current.pause();
     }
-  }, [isMuted]);
+  }, [isMuted, hasInteracted]);
 
   const playSfx = (file) => {
-    if (isMuted) return;
+    if (isMuted || !hasInteracted) return;
     const sfx = new Audio(`${file}`);
     sfx.volume = 0.5;
     sfx.play();
@@ -34,7 +90,7 @@ function App() {
 > TYPE 'HELP' TO LIST COMMANDS...`;
 
   useEffect(() => {
-    if (currentView === 'home' && !isLoading) {
+    if (hasInteracted && currentView === 'home' && !isLoading) {
       let i = 0;
       setDisplayText('');
       const interval = setInterval(() => {
@@ -47,21 +103,16 @@ function App() {
       }, 40);
       return () => clearInterval(interval);
     }
-  }, [currentView, isLoading]);
+  }, [currentView, isLoading, hasInteracted]);
 
   const handleNav = (e, view) => {
     if (e) e.preventDefault();
-
     playSfx('button-click.mp3');
-
     setIsLoading(true);
-
     playSfx('Garble1.mp3');
-
     setTimeout(() => {
       setCurrentView(view);
       setIsLoading(false);
-      
     }, 1200); 
   };
 
@@ -75,19 +126,21 @@ function App() {
         </div>
       );
     }
-    
 
     switch (currentView) {
       case 'about':
         return (
           <div className="view-content">
             <h2> SOBRE_MIM.TXT</h2>
-            <a class='minhafoto'></a>           
-            <p>Formado em ADS pela Unicesumar</p>
-            <p>Atualmente estou focado em Segurança da Informação e Pentesting (Hacking Ético)</p>
-            <p>Pretendo me </p>
+            <div className='sobreform'> 
+              <div className='minhafoto'></div>
+              <p>★ Formado em ADS (Unicesumar)<br/>
+              ★ Curso técnico em Programação (ETEC)<br/>
+              ★ Estudando cybersecurity e Pentesting (HackerSec e Solyd)<br/>
+              ★ Pretendo me especializar em infraestrutura crítica.</p>
+            </div>
+            <p>Sou um entusiasta de cibersegurança focado em entender as vulnerabilidades que comprometem a integridade de sistemas digitais. Com uma base sólida em lógica de programação e Python, venho dedicando meus estudos à área de Pentest (Testes de Intrusão) e análise de falhas. Minha jornada começou na programação geral aos 14 anos, mas minha verdadeira motivação está em "pensar como um invasor" para construir defesas mais fortes. Atualmente, foco meus estudos em OWASP Top 10, redes de computadores e o desenvolvimento de scripts para automação de testes de segurança.</p>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
-            
           </div>
         );
       case 'projects':
@@ -95,10 +148,7 @@ function App() {
           <div className="view-content">
             <h2> REPOSITORIOS.BIN</h2>
             <p>Listando diretórios disponíveis no GitHub...</p>
-            <ul>
-              <li><a href="#">[PROJETO_01] - Sistema de Login Seguro</a></li>
-              <li><a href="#">[PROJETO_02] - API Rest com Node.js</a></li>
-            </ul>
+            <ul></ul>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
         );
@@ -107,20 +157,26 @@ function App() {
           <div className="view-content">
             <h2> HABILIDADES.ZIP</h2>
             <p>Listando minhas habilidades em programação...</p>
-            <div class='skill'>
-                HTML - 96%
-                <div id='progress-barra'><div class='progress-prenchimento1'></div></div>
-                CSS - 91%
-                <div id='progress-barra'><div class='progress-prenchimento2'></div></div>
-                JavaScript - 79%
-                <div id='progress-barra'><div class='progress-prenchimento3'></div></div>
-                Python - 70%
-                <div id='progress-barra'><div class='progress-prenchimento4'></div></div> 
+            <div className='skill'>
+              <div>
+                Blackarch linux - 1%
+                <div id='progress-barra'><div className='progress-prenchimento7'></div></div>
                 Kali Linux - 9%
-                <div id='progress-barra'><div class='progress-prenchimento5'></div></div> 
-                Debian - 2%
-                <div id='progress-barra'><div class='progress-prenchimento6'></div></div> 
+                <div id='progress-barra'><div className='progress-prenchimento5'></div></div> 
+                HTML - 96%
+                <div id='progress-barra'><div className='progress-prenchimento1'></div></div>
+                CSS - 91%
+                <div id='progress-barra'><div className='progress-prenchimento2'></div></div>
               </div>
+              <div>
+                JavaScript - 79%
+                <div id='progress-barra'><div className='progress-prenchimento3'></div></div>
+                Python - 70%
+                <div id='progress-barra'><div className='progress-prenchimento4'></div></div> 
+                SQL - 50%
+                <div id='progress-barra'><div className='progress-prenchimento6'></div></div>
+              </div>
+            </div>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
         );
@@ -130,9 +186,9 @@ function App() {
             <h2> JOGOS.EXE</h2>
             <p>Lista de jogos para você testar...</p>
             <ul style={{display:'flex', flexDirection:'initial'}}>
-              <a class='game1' href="#"></a>
-              <a class='game2' href="#"></a>
-              <a class='game3' href="#"></a>
+              <Link to="#" className='game1' onClick={() => playSfx('button-click.mp3')}></Link>
+              <Link to="/velha" className='game2' onClick={() => playSfx('button-click.mp3')}></Link>
+              <Link to="/snakegame" className='game3' onClick={() => playSfx('button-click.mp3')}></Link>
             </ul>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
@@ -140,23 +196,20 @@ function App() {
       case 'sis_test':
         return (
           <div className="view-content">
-            <h2> REPOSITORIOS.BIN</h2>
-            <p>Listando diretórios disponíveis no GitHub...</p>
-            <ul>
-              <li><a href="#">[PROJETO_01] - Sistema de Login Seguro</a></li>
-              <li><a href="#">[PROJETO_02] - API Rest com Node.js</a></li>
-            </ul>
+            <h2> SISTEMAS_TESTE.LOG</h2>
+            <p>Ambientes de homologação ativos:</p>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
         );
       case 'contact':
         return (
           <div className="view-content">
-            <h2> REPOSITORIOS.BIN</h2>
-            <p>Listando diretórios disponíveis no GitHub...</p>
+            <h2> CONTATO.SH</h2>
+            <p>Canais de comunicação seguros:</p>
             <ul>
-              <li><a href="#">[PROJETO_01] - Sistema de Login Seguro</a></li>
-              <li><a href="#">[PROJETO_02] - API Rest com Node.js</a></li>
+              <li><a href="https://www.linkedin.com/in/gustavo-silva-de-deus-737a76276/" target="_blank" rel="noopener noreferrer">[LINKEDIN]</a></li>
+              <li><a href="https://github.com/Neuritos" target="_blank" rel="noopener noreferrer">[GITHUB]</a></li>
+              <li><a href="mailto:gustavodedeus111@gmail.com" target="_blank" rel="noopener noreferrer">[EMAIL]</a></li>
             </ul>
             <a className="back-link" onClick={(e) => handleNav(e, 'home')}>[ VOLTAR ]</a>
           </div>
@@ -169,7 +222,6 @@ function App() {
               <div className="text-output">{displayText}</div>
               <span className="cursor">█</span>
             </div>
-
             <nav className="terminal-nav">
               <br />
               <p className="dir">~/portfolio/links</p>
@@ -187,19 +239,27 @@ function App() {
     }
   };
 
+  if (!hasInteracted) {
+    return (
+      <BootScreen 
+        title={bootConfig.title}
+        status={bootConfig.status}
+        message={bootConfig.message}
+        color={bootConfig.color}
+        onStart={() => setHasInteracted(true)}
+      />
+    );
+  }
+
   return (
     <div className="terminal-screen" style={{ '--main-color': terminalColor }}>
       <div className="scanlines"></div>
-      <div className="audio-controls">
-
-</div>
       <div className="sound-picker">
-        <a class= 'sound' onClick={() => setIsMuted(!isMuted)}>
+        <a className='sound' onClick={() => setIsMuted(!isMuted)}>
           {isMuted ? "[ 🔊 SOUND: OFF ]" : "[ 🔊 SOUND: ON ]"}
         </a>
-        </div>
+      </div>
       <div className="color-picker">
-
         <span className="label">THEME_COLOR:</span>
         <button className="dot green" onClick={() => { setTerminalColor('#00FF41'); playSfx('button-click.mp3'); }}></button>
         <button className="dot amber" onClick={() => { setTerminalColor('#FFB000'); playSfx('button-click.mp3'); }}></button>
@@ -207,18 +267,19 @@ function App() {
         <button className="dot red" onClick={() => { setTerminalColor('#FF3131'); playSfx('button-click.mp3'); }}></button>
         <button className="dot purple" onClick={() => { setTerminalColor('#a800ba'); playSfx('button-click.mp3'); }}></button>
       </div>
-
       <div className="terminal-window">
         <header className="terminal-header">
           <span className="title">TERMINAL_V.4.0 (ADS_SEC) - {currentView.toUpperCase()}</span>
           <div className="controls"><span>_</span><span>□</span><span>×</span></div>
         </header>
-
         <section className="terminal-content">
-          {renderView()}
+          <Routes>
+            <Route path="/" element={renderView()} />
+            <Route path="/snakegame" element={<SnakeGame />} />
+            <Route path="/velha" element={<Velha />} />
+          </Routes>
         </section>
       </div>
-
       <footer className="footer-info">
         ESTABLISHED CONNECTION: SECURE_AES_256 | STATUS: {isLoading ? 'BUSY' : 'READY'}
       </footer>

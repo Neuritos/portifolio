@@ -152,6 +152,11 @@
   display: inline-block;
 }
 
+.sobreform{
+  display: flex;
+  flex-direction: initial;
+}
+
 .game1, .game2, .game3{
   padding: 10px;
   border: 3px solid  var(--main-color);
@@ -164,7 +169,7 @@
   background-color: var(--main-color);
 }
 .game1{
-  background-image: url(doom-logo.png);
+  background-image: url(em-breve.png);
   align-items: center;
   justify-content: center;
   display: flex;
@@ -223,10 +228,11 @@
 
 .skill {
   display: flex;
-  flex-direction: column;
+  flex-direction: initial;
   align-items: left;
   justify-content: center;
   font-weight: bold;
+  gap: 50px;
 }
 
 @keyframes blink-text {
@@ -242,7 +248,7 @@
   margin-bottom: 20px;
 }
 
-.progress-prenchimento1, .progress-prenchimento2, .progress-prenchimento3, .progress-prenchimento4, .progress-prenchimento5, .progress-prenchimento6 {
+.progress-prenchimento1, .progress-prenchimento2, .progress-prenchimento3, .progress-prenchimento4, .progress-prenchimento5, .progress-prenchimento6, .progress-prenchimento7{
   height: 100%;
   background-color: var(--main-color);
   width: 0%;
@@ -267,6 +273,9 @@
 }
 .progress-prenchimento6{
   animation: fill-skill5 1.5s forwards;
+}
+.progress-prenchimento7{
+  animation: fill-skill6 1.5s forwards;
 }
 
 @keyframes fill-skill {
@@ -304,9 +313,19 @@
 @keyframes fill-skill5 {
   0% { width: 0%; 
   }
-  100% { width: 2%; 
+  100% { width: 50%; 
+  }
+}
+
+@keyframes fill-skill6 {
+  0% { width: 0%; 
+  }
+  100% { width: 1%; 
   }
 }
 
 
+canvas{
+  border-color: 4px solid var(--main-color);
+}
 
